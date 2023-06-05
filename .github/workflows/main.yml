@@ -1,4 +1,4 @@
-name: Notify Asana on Push
+name: Asana Notification
 
 on:
   push:
@@ -6,23 +6,16 @@ on:
       - main
 
 jobs:
-  notify:
+  notify_asana:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install axios
-
       - name: Notify Asana
-        run: node notifyAsana.js
-        env:
-          ASANA_API_KEY: ${{ secrets.ASANA_API_KEY }}
-          ASANA_PROJECT_ID: ${{ secrets.ASANA_PROJECT_ID }}
+        uses: asana/github-action@v1
+        with:
+          asana-access-token: ${{ secrets.ASANA_ACCESS_TOKEN }}
+          task-name: New commit on main branch
+          task-notes: There is a new commit on the main branch. Please review.
