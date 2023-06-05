@@ -1,3 +1,6 @@
+
+
+          
 name: Asana Integration
 
 on:
@@ -24,9 +27,5 @@ jobs:
             "Content-Type" = "application/json"
           } `
           -Method POST `
-          -Body @{
-            "data" = @{
-              "name" = "New task from GitHub"
-              "projects" = @("$ASANA_PROJECT_ID")
-            }
-          } | Out-Null
+          -Body '{ "data": { "name": "New task from GitHub", "projects": ["<ASANA_PROJECT_ID>"] } }'
+
