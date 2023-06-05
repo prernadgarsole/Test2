@@ -16,7 +16,7 @@ jobs:
       - name: Create Asana Task
         env:
           ASANA_ACCESS_TOKEN: ${{ secrets.ASANA_ACCESS_TOKEN }}
-          ASANA_PROJECT_ID: "<ASANA_PROJECT_ID>"
+          ASANA_PROJECT_ID: "1/1204760161937729:2ef4a223f8255b7789d484bed4b175fd"
         run: |
           curl -X POST -H "Authorization: Bearer $ASANA_ACCESS_TOKEN" \
           -H "Content-Type: application/json" \
