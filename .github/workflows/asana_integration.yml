@@ -1,4 +1,4 @@
-name: Asana Integration
+name: Sync with Asana
 
 on:
   push:
@@ -6,18 +6,23 @@ on:
       - main
 
 jobs:
-  asana_integration_job:
-    runs-on: windows-latest
-    
+  sync:
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
-        
-      - name: Install Asana CLI
-        run: npm install -g asana-cli
-      
-      - name: Configure Asana CLI
-        run: asana configure --token ${{ secrets.ASANA_TOKEN }}
-      
-      - name: Create Asana Task
-        run: asana create-task --workspace=1204760162033794 --project=1204760620077158 --name="New Task from GitHub"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install axios
+
+      - name: Sync with Asana
+        run: node syncWithAsana.js
+        env:
+          ASANA_API_KEY: ${{ secrets.ASANA_API_KEY }}
+          ASANA_PROJECT_ID: ${{ secrets.ASANA_PROJECT_ID }}
