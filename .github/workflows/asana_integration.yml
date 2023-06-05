@@ -17,7 +17,7 @@ jobs:
         run: npm install -g asana-cli
       
       - name: Configure Asana CLI
-        run: asana configure --api-key ${{ secrets.ASANA_API_KEY }}
+        run: asana configure --token ${{ secrets.ASANA_TOKEN }}
       
       - name: Create Asana Task
         run: asana create-task --workspace=1204760162033794 --project=1204760620077158 --name="New Task from GitHub"
