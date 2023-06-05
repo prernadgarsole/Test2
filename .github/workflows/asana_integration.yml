@@ -1,0 +1,31 @@
+name: Asana Integration
+on:   
+  push:
+    branches:
+      - main
+      
+      
+jobs:
+  asana_integration:
+    runs-on: windows-latest
+  
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Create Asana task
+        env:
+          ASANA_ACCESS_TOKEN: ${{ secrets.ASANA_ACCESS_TOKEN}}
+          ASANA_PROJECT_ID: "1/1204760161937729:2ef4a223f8255b7789d484bed4b175fd"
+        run:
+          curl -X POST -H "Authorization:Bearer $ASANA_ACCESS_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "data" {
+              "name" : "New Task from github",
+              "projects": [$ASANA_PROJECT_ID"]
+            }
+          }' \
+          "https://app.asana.com/api/1.0/tasks"
+    
+      
