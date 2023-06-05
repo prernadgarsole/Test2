@@ -1,12 +1,15 @@
-name: Sync with Asana
+name: Asana Integration
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types:
+      - opened
+  issues:
+    types:
+      - opened
 
 jobs:
-  sync:
+  create-asana-task:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,13 +19,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: 14
 
       - name: Install dependencies
-        run: npm install axios
+        run: npm install
 
-      - name: Sync with Asana
-        run: node syncWithAsana.js
+      - name: Create Asana task
         env:
           ASANA_API_KEY: ${{ secrets.ASANA_API_KEY }}
-          ASANA_PROJECT_ID: ${{ secrets.ASANA_PROJECT_ID }}
+          ASANA_PROJECT_ID: <your Asana project ID>
+        run: node your_script.js
