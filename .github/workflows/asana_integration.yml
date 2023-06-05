@@ -27,5 +27,5 @@ jobs:
       - name: Create Asana task
         env:
           ASANA_API_KEY: ${{ secrets.ASANA_API_KEY }}
-          ASANA_PROJECT_ID: <your Asana project ID>
+          ASANA_PROJECT_ID: 1204763105220463
         run: node your_script.js
