@@ -23,11 +23,8 @@ async function createTask(title, description) {
   return response.data.data;
 }
 
-const pushEvent = JSON.parse(process.env.GITHUB_EVENT_PATH);
-const commitMessage = pushEvent.head_commit.message;
-const repositoryName = pushEvent.repository.name;
-
-createTask('New push event in GitHub', `Repository: ${repositoryName}\nCommit message: ${commitMessage}`)
+// Example usage:
+createTask('Example task', 'This is an example task created from GitHub')
   .then(() => {
     console.log('Asana task created successfully!');
   })
