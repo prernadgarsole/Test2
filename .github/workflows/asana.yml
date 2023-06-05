@@ -1,0 +1,29 @@
+name: Asana Integration
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+
+jobs:
+  asana:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Asana GitHub Action
+        uses: asana/github-actions@latest
+        with:
+          asana-pat: ${{ secrets.ASANA_PAT }}
+          action: ${{ github.event.action }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          trigger-phrase: "ASANA TASK:"
+          text: ${{ github.event.pull_request.body }}
+          comment-id: ${{ github.event.comment_id }}
+          is-pinned: true
+          targets: '[{"project": "Backlog", "section": "Development Done"}, {"project": "Current Sprint", "section": "In Review"}]'
+          link-required: true
+          is-complete: false
