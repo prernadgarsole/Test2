@@ -19,4 +19,4 @@ jobs:
       - name: Create Asana Task
         run: |
           asana configure --token ${{ secrets.ASANA_TOKEN }}
-          asana create-task --workspace=my_workspace_id --project=my_project_id --name="New Task from GitHub"
+          asana create-task --workspace=1204760162033794 --project=1204760620077158 --name="New Task from GitHub"
