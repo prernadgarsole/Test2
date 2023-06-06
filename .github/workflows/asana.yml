@@ -89,7 +89,7 @@ commit_sha = os.environ['GITHUB_SHA']
 task_notes = f'Branch: {branch_name}\\nAuthor: {commit_author}\\nCommit SHA: {commit_sha}'
 
 try:
-    response = client.tasks.create_in_workspace(workspace='YOUR_WORKSPACE_ID', name=task_name, projects=[project_id], notes=task_notes)
+    response = client.tasks.create_in_workspace(workspace='1204762762053035', name=task_name, projects=[project_id], notes=task_notes)
     print('Asana task created with ID:', response['id'])
 except asana.error.AsanaError as e:
     print('Error creating Asana task:', e)
