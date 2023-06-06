@@ -9,6 +9,11 @@ jobs:
   asana:
     runs-on: ubuntu-latest
     steps:
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Install Asana CLI
         run: npm install -g asana
 
@@ -19,4 +24,5 @@ jobs:
         run: |
           asana create-task --name "New Push: ${{ github.event.head_commit.message }}" \
           --project 1204763105220463
+
 
