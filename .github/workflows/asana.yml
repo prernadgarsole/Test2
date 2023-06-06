@@ -73,19 +73,24 @@ jobs:
       - name: Create Asana task
         run: |
           pip install asana
-          python - << EOF
-          import asana
-          import os
+          python -c "
+import asana
+import os
 
-          client = asana.Client.access_token('1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59') # Replace with your Asana Personal Access Token
-          project_id = '1204763105220463' # Replace with your Asana project ID
-          task_name = 'New Push: ' + os.environ['GITHUB_SHA']
+client = asana.Client.access_token('1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59') # Replace with your Asana Personal Access Token
+project_id = '1204763105220463' # Replace with your Asana project ID
+task_name = 'New Push:'
+branch_name = os.environ['GITHUB_REF'].split('/')[-1]
+commit_author = os.environ['GITHUB_ACTOR']
+commit_sha = os.environ['GITHUB_SHA']
 
-          try:
-              response = client.tasks.create_in_workspace(workspace='YOUR_WORKSPACE_ID', name=task_name, projects=[project_id])
-              print('Asana task created with ID:', response['id'])
-          except asana.error.AsanaError as e:
-              print('Error creating Asana task:', e)
+task_notes = f'Branch: {branch_name}\\nAuthor: {commit_author}\\nCommit SHA: {commit_sha}'
 
-          EOF
+try:
+    response = client.tasks.create_in_workspace(workspace='YOUR_WORKSPACE_ID', name=task_name, projects=[project_id], notes=task_notes)
+    print('Asana task created with ID:', response['id'])
+except asana.error.AsanaError as e:
+    print('Error creating Asana task:', e)
+"
+
 
