@@ -14,7 +14,7 @@ jobs:
         run: npm install -g asana
 
       - name: Set up Asana GitHub integration
-        run: asana github setup --token <YOUR_PERSONAL_ACCESS_TOKEN>
+        run: asana github setup --token 1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59
 
       - name: Create Asana task
-        run: asana create-task --name "New Pull Request: ${{ github.event.pull_request.title }}" --project <ASANA_PROJECT_ID>
+        run: asana create-task --name "New Pull Request: ${{ github.event.pull_request.title }}" --project 1204763105220463
