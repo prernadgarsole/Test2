@@ -70,9 +70,11 @@ jobs:
         with:
           python-version: '3.x' # Replace with the desired Python version
 
+      - name: Install Asana module
+        run: pip install asana
+
       - name: Create Asana task
         run: |
-          pip install asana
           python -c "
 import asana
 import os
@@ -92,5 +94,3 @@ try:
 except asana.error.AsanaError as e:
     print('Error creating Asana task:', e)
 "
-
-
