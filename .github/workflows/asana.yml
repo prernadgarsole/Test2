@@ -4,26 +4,17 @@ on:
   pull_request:
     types:
       - opened
-      - edited
+      - synchronize
 
 jobs:
   asana:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Install Asana CLI
+        run: npm install -g asana
 
-      - name: Asana GitHub Action
-        uses: asana/github-actions@latest
-        with:
-          asana-pat: ${{ secrets.ASANA_PAT }}
-          action: ${{ github.event.action }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          trigger-phrase: "ASANA TASK:"
-          text: ${{ github.event.pull_request.body }}
-          comment-id: ${{ github.event.comment_id }}
-          is-pinned: true
-          targets: '[{"project": "Backlog", "section": "Development Done"}, {"project": "Current Sprint", "section": "In Review"}]'
-          link-required: true
-          is-complete: false
+      - name: Set up Asana GitHub integration
+        run: asana github setup --token <YOUR_PERSONAL_ACCESS_TOKEN>
+
+      - name: Create Asana task
+        run: asana create-task --name "New Pull Request: ${{ github.event.pull_request.title }}" --project <ASANA_PROJECT_ID>
