@@ -1,60 +1,4 @@
 
-# name: Asana Integration
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   asana:
-#     runs-on: windows-latest
-#     steps:
-#       - name: Install Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: '14'
-
-#       - name: Create Asana task
-#         run: |
-#           npm install --save axios
-#           node -e "
-#             const axios = require('axios');
-#             const taskName = 'New Push:';
-#             const branchName = process.env.GITHUB_REF.split('/').pop();
-#             const commitAuthor = process.env.GITHUB_ACTOR;
-#             const commitMessage = process.env.GITHUB_SHA;
-#             const projectId = '1204763105220463'; // Replace with your Asana project ID
-#             const token = '1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59'; // Replace with your Asana Personal Access Token
-
-#             const createTask = async () => {
-#               try {
-#                 const response = await axios.post(
-#                   'https://app.asana.com/api/1.0/tasks',
-#                   {
-#                     data: {
-#                       name: taskName,
-#                       notes: 'Branch: ' + branchName + '\\nAuthor: ' + commitAuthor + '\\nCommit SHA: ' + commitMessage,
-#                       projects: [projectId],
-#                     },
-#                   },
-#                   {
-#                     headers: {
-#                       'Authorization': 'Bearer ' + token,
-#                     },
-#                   }
-#                 );
-#                 console.log('Asana task created with ID:', response.data.data.id);
-#               } catch (error) {
-#                 console.error('Error creating Asana task:', error.response.data.errors);
-#               }
-#             };
-
-#             createTask();
-#           "
-
-
-
 name: Asana Integration
 
 on:
@@ -66,33 +10,45 @@ jobs:
   asana:
     runs-on: windows-latest
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v2
         with:
-          python-version: '3.x' # Replace with the desired Python version
-
-      - name: Install Asana module
-        run: pip install asana
+          node-version: '14'
 
       - name: Create Asana task
         run: |
-          python -c "
-import asana
-import os
+          npm install --save axios
+          node -e "
+            const axios = require('axios');
+            const taskName = 'New Push:';
+            const branchName = process.env.GITHUB_REF.split('/').pop();
+            const commitAuthor = process.env.GITHUB_ACTOR;
+            const commitMessage = process.env.GITHUB_SHA;
+            const projectId = '1204763105220463'; // Replace with your Asana project ID
+            const token = '1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59'; // Replace with your Asana Personal Access Token
 
-client = asana.Client.access_token('1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59') # Replace with your Asana Personal Access Token
-project_id = '1204763105220463' # Replace with your Asana project ID
-task_name = 'New Push:'
-branch_name = os.environ['GITHUB_REF'].split('/')[-1]
-commit_author = os.environ['GITHUB_ACTOR']
-commit_sha = os.environ['GITHUB_SHA']
+            const createTask = async () => {
+              try {
+                const response = await axios.post(
+                  'https://app.asana.com/api/1.0/tasks',
+                  {
+                    data: {
+                      name: taskName,
+                      notes: 'Branch: ' + branchName + '\\nAuthor: ' + commitAuthor + '\\nCommit SHA: ' + commitMessage,
+                      projects: [projectId],
+                    },
+                  },
+                  {
+                    headers: {
+                      'Authorization': 'Bearer ' + token,
+                    },
+                  }
+                );
+                console.log('Asana task created with ID:', response.data.data.id);
+              } catch (error) {
+                console.error('Error creating Asana task:', error.response.data.errors);
+              }
+            };
 
-task_notes = f'Branch: {branch_name}\\nAuthor: {commit_author}\\nCommit SHA: {commit_sha}'
-
-try:
-    response = client.tasks.create_in_workspace(workspace='1204762762053035', name=task_name, projects=[project_id], notes=task_notes)
-    print('Asana task created with ID:', response['id'])
-except asana.error.AsanaError as e:
-    print('Error creating Asana task:', e)
-"
-
+            createTask();
+          "
