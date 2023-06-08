@@ -26,7 +26,7 @@ jobs:
           npm install --save axios
           node -e "
             const axios = require('axios');
-           const projectId = '1204763105220463'; // Replace with your Asana project ID
+            const projectId = '1204763105220463'; // Replace with your Asana project ID
             const token = '1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59'; // Replace with your Asana Personal Access Token
             const getTaskDetails = async () => {
               try {
@@ -53,50 +53,27 @@ jobs:
           # Your code to update the GitHub issue based on the Asana task details goes here
           # You can access the task details using ${{ steps.get_task_details.outputs.task_details }}
 
-          # Send notification to developer via email using Nodemailer
-          npm install --save nodemailer
-          node -e "
-            const nodemailer = require('nodemailer');
-
-            const transporter = nodemailer.createTransport({
-              // Configure the email sending service or SMTP details here
-              // Refer to the Nodemailer documentation for configuration options
-            });
-
-            const mailOptions = {
-              from: 'prernagarsole@gmail.com',
-              to: 'prernagarsole@gmail.com',
-              subject: 'Asana Ticket Update',
-              text: 'Asana ticket has been changed. Please review and make necessary changes.',
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-              if (error) {
-                console.error('Error sending email:', error);
-              } else {
-                console.log('Email sent:', info.response);
-              }
-            });
-          "
+          # Example notification within GitHub Actions
+          echo "The Asana task has been updated. Please review and make necessary changes to the GitHub issue."
 
       - name: Update Asana Task
         run: |
           # Your code to update the Asana task based on changes in GitHub goes here
 
-          # Example notification to customers
-          echo "Code has been updated. The ticket status will be updated in Asana."
+          # Example notification within GitHub Actions
+          echo "The GitHub issue has been updated. The changes will be reflected in the Asana task."
 
       - name: Notify Asana for Ready to Test
         if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, 'ready to test') }}
         run: |
           # Your code to notify Asana that the ticket is ready for testing goes here
 
-          # Example notification to Asana
+          # Example notification within GitHub Actions
           echo "The ticket is ready for testing. Please proceed with testing."
 
       - name: Notify GitHub for Ticket Update
         run: |
           # Your code to notify GitHub about the ticket update goes here
 
-          # Example notification to GitHub
-          echo "The ticket has been updated. Please review and make necessary changes."
+          # Example notification within GitHub Actions
+          echo "The Asana task has been updated. Please review and make necessary changes to the GitHub issue."
