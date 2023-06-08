@@ -53,28 +53,27 @@ jobs:
           # Your code to update the GitHub issue based on the Asana task details goes here
           # You can access the task details using ${{ steps.get_task_details.outputs.task_details }}
 
-          # Send notification to developers via email
-          echo "Subject: Asana ticket has been changed\n\nDear developers, the Asana ticket has been updated. Please review and make necessary changes." | mail -s "Asana Ticket Update" developer@
-          
-          
+          # Send notification to developer via email
+          echo "Subject: Asana ticket has been changed\n\nDear developer, the Asana ticket with number ${YOUR_ASANA_TASK_ID} has been updated. Please review and make necessary changes." | mail -s "Asana Ticket Update" prernagarsole@gmail.com
 
       - name: Update Asana Task
         run: |
           # Your code to update the Asana task based on changes in GitHub goes here
 
-          # Send notification to customers via email
-          echo "Subject: Code has been updated\n\nDear customers, the code has been updated. The ticket status will be updated in Asana." | mail -s "Code Update" prernagarsole@gmail.com
-          
+          # Example notification to customers
+          echo "Code has been updated. The ticket status will be updated in Asana."
 
       - name: Notify Asana for Ready to Test
         if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, 'ready to test') }}
         run: |
           # Your code to notify Asana that the ticket is ready for testing goes here
 
-          # Send notification to Asana via email or Asana API
+          # Example notification to Asana
+          echo "The ticket is ready for testing. Please proceed with testing."
 
       - name: Notify GitHub for Ticket Update
         run: |
           # Your code to notify GitHub about the ticket update goes here
 
-          # Send notification to GitHub via email or GitHub API
+          # Example notification to GitHub
+          echo "The ticket has been updated. Please review and make necessary changes."
