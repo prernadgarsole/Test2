@@ -28,7 +28,6 @@ jobs:
             const axios = require('axios');
             const projectId = '1204763105220463'; // Replace with your Asana project ID
             const token = '1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59'; // Replace with your Asana Personal Access Token
-
             const getTaskDetails = async () => {
               try {
                 const response = await axios.get(
@@ -54,15 +53,28 @@ jobs:
           # Your code to update the GitHub issue based on the Asana task details goes here
           # You can access the task details using ${{ steps.get_task_details.outputs.task_details }}
 
+          # Send notification to developers via email
+          echo "Subject: Asana ticket has been changed\n\nDear developers, the Asana ticket has been updated. Please review and make necessary changes." | mail -s "Asana Ticket Update" developer@
+          
+          
+
       - name: Update Asana Task
         run: |
           # Your code to update the Asana task based on changes in GitHub goes here
+
+          # Send notification to customers via email
+          echo "Subject: Code has been updated\n\nDear customers, the code has been updated. The ticket status will be updated in Asana." | mail -s "Code Update" prernagarsole@gmail.com
+          
 
       - name: Notify Asana for Ready to Test
         if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, 'ready to test') }}
         run: |
           # Your code to notify Asana that the ticket is ready for testing goes here
 
+          # Send notification to Asana via email or Asana API
+
       - name: Notify GitHub for Ticket Update
         run: |
           # Your code to notify GitHub about the ticket update goes here
+
+          # Send notification to GitHub via email or GitHub API
