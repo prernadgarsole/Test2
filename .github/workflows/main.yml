@@ -53,8 +53,31 @@ jobs:
           # Your code to update the GitHub issue based on the Asana task details goes here
           # You can access the task details using ${{ steps.get_task_details.outputs.task_details }}
 
-          # Send notification to developer via email
-          echo "Subject: Asana ticket has been changed\n\nDear developer, the Asana ticket with number ${YOUR_ASANA_TASK_ID} has been updated. Please review and make necessary changes." | mail -s "Asana Ticket Update" prernagarsole@gmail.com
+          # Send notification to developer via email using Nodemailer
+          npm install --save nodemailer
+          node -e "
+            const nodemailer = require('nodemailer');
+
+            const transporter = nodemailer.createTransport({
+              // Configure the email sending service or SMTP details here
+              // Refer to the Nodemailer documentation for configuration options
+            });
+
+            const mailOptions = {
+              from: 'prernagarsole@gmail.com',
+              to: 'prernagarsole@gmail.com',
+              subject: 'Asana Ticket Update',
+              text: `Asana ticket has been changed. Please review and make necessary changes.\n\nTicket ID: ${YOUR_ASANA_TASK_ID}`,
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                console.error('Error sending email:', error);
+              } else {
+                                console.log('Email sent:', info.response);
+              }
+            });
+          ```
 
       - name: Update Asana Task
         run: |
@@ -77,3 +100,4 @@ jobs:
 
           # Example notification to GitHub
           echo "The ticket has been updated. Please review and make necessary changes."
+
