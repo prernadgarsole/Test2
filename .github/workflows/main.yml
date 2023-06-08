@@ -48,6 +48,15 @@ jobs:
             getTaskDetails();
           "
 
+      - name: Sync Asana Task with GitHub
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          # Your code to sync the Asana task ID and details with GitHub goes here
+          # You can access the task details using ${{ steps.get_task_details.outputs.task_details }}
+
+          # Example notification within GitHub Actions
+          echo "Asana task ID and details synced with GitHub."
+
       - name: Update GitHub Issue
         run: |
           # Your code to update the GitHub issue based on the Asana task details goes here
