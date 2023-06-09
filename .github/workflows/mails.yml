@@ -53,7 +53,7 @@ jobs:
 
                 // Get task assignee's email
                 const taskId = response.data.data.id;
-                const taskResponse = await axios.get(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
+                const taskResponse = await axios.get(`https://app.asana.com/api/1.0/tasks/${taskId}`), {
                   headers: {
                     'Authorization': 'Bearer ' + token,
                   },
