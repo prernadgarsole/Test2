@@ -2,7 +2,8 @@ name: Asana Task Creation Email Notification
 
 on:
   issues:
-    types: [opened]
+    types:
+      - opened
 
 jobs:
   send-email:
@@ -12,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Install Python
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
@@ -23,5 +24,7 @@ jobs:
       - name: Send Email
         env:
           ASANA_ACCESS_TOKEN: ${{ secrets.ASANA_ACCESS_TOKEN }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+          FROM_PASSWORD: ${{ secrets.FROM_PASSWORD }}
         run: |
           python send_email.py "${{ github.event.issue.title }}" "${{ github.event.issue.assignee.email }}"
