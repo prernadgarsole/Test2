@@ -222,6 +222,8 @@ jobs:
                 console.log('Asana task updated with ID:', response.data.data.id);
              // Fetch the assignee email address
                   await fetchAssigneeEmail(taskId);
+                  // Send email notification
+               sendEmailNotification('Task updated', taskId);
               } catch (error) {
                 console.error('Error updating Asana task:', error.response.data.errors);
               }
