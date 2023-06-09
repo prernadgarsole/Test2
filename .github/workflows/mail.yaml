@@ -162,19 +162,22 @@ jobs:
                   }
                 }
 
-                  if (taskId) {
-            // Task already exists, update it
-            await updateTask(taskId);
-          } else {
-            // Task doesn't exist, create it
-            const createResponse = await createTask();
-            taskId = createResponse.data.data.id;
-          }
 
-          // Send email notification
-          sendEmailNotification('Task created/updated', taskId);
-
-
+           if (taskId) {
+                            // Task already exists, update it
+                            await updateTask(taskId);
+                            sendEmailNotification('Task updated', taskId);
+                          } else {
+                            // Task doesn't exist, create it
+                            const createResponse = await createTask();
+                            taskId = createResponse.data.data.id;
+                            sendEmailNotification('Task created', taskId);
+                          }
+                        } catch (error) {
+                          console.error('Error creating/updating Asana task:', error.response.data.errors);
+                        }
+                      };
+                  
 
             const createTask = async () => {
               try {
