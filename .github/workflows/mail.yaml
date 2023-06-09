@@ -75,7 +75,7 @@ jobs:
                 service: 'gmail',
                 auth: {
                   user: 'prernagarsole@gmail.com', // Replace with your Gmail email address
-                  pass: 'Prerna@1994', // Replace with your Gmail application-specific password
+                  pass: 'ocycmtbojtdomkof', // Replace with your Gmail application-specific password
                 },
               });
 
