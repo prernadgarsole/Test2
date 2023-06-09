@@ -1,88 +1,88 @@
-name: Asana-GitHub Integration
+# name: Asana-GitHub Integration
 
-on:
-  schedule:
-    - cron: "*/5 * * * *"  # Runs the workflow every 5 minutes
-  push:
-    branches:
-      - main
+# on:
+#   schedule:
+#     - cron: "*/5 * * * *"  # Runs the workflow every 5 minutes
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  asana_github_integration:
-    runs-on: ubuntu-latest
+# jobs:
+#   asana_github_integration:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+#       - name: Install Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '14'
 
-      - name: Get Asana Task Details
-        id: get_task_details
-        run: |
-          npm install --save axios
-          node -e "
-            const axios = require('axios');
-            const projectId = '1204763105220463'; // Replace with your Asana project ID
-            const token = '1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59'; // Replace with your Asana Personal Access Token
-            const getTaskDetails = async () => {
-              try {
-                const response = await axios.get(
-                  'https://app.asana.com/api/1.0/tasks/' + taskId,
-                  {
-                    headers: {
-                      'Authorization': 'Bearer ' + token,
-                    },
-                  }
-                );
-                console.log('Asana task details:', response.data.data);
-                console.log('::set-output name=task_details::' + JSON.stringify(response.data.data));
-              } catch (error) {
-                console.error('Error retrieving Asana task details:', error.response.data.errors);
-              }
-            };
+#       - name: Get Asana Task Details
+#         id: get_task_details
+#         run: |
+#           npm install --save axios
+#           node -e "
+#             const axios = require('axios');
+#             const projectId = '1204763105220463'; // Replace with your Asana project ID
+#             const token = '1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59'; // Replace with your Asana Personal Access Token
+#             const getTaskDetails = async () => {
+#               try {
+#                 const response = await axios.get(
+#                   'https://app.asana.com/api/1.0/tasks/' + taskId,
+#                   {
+#                     headers: {
+#                       'Authorization': 'Bearer ' + token,
+#                     },
+#                   }
+#                 );
+#                 console.log('Asana task details:', response.data.data);
+#                 console.log('::set-output name=task_details::' + JSON.stringify(response.data.data));
+#               } catch (error) {
+#                 console.error('Error retrieving Asana task details:', error.response.data.errors);
+#               }
+#             };
 
-            getTaskDetails();
-          "
+#             getTaskDetails();
+#           "
 
-      - name: Sync Asana Task with GitHub
-        if: ${{ github.event_name == 'push' }}
-        run: |
-          # Your code to sync the Asana task ID and details with GitHub goes here
-          # You can access the task details using ${{ steps.get_task_details.outputs.task_details }}
+#       - name: Sync Asana Task with GitHub
+#         if: ${{ github.event_name == 'push' }}
+#         run: |
+#           # Your code to sync the Asana task ID and details with GitHub goes here
+#           # You can access the task details using ${{ steps.get_task_details.outputs.task_details }}
 
-          # Example notification within GitHub Actions
-          echo "Asana task ID and details synced with GitHub."
+#           # Example notification within GitHub Actions
+#           echo "Asana task ID and details synced with GitHub."
 
-      - name: Update GitHub Issue
-        run: |
-          # Your code to update the GitHub issue based on the Asana task details goes here
-          # You can access the task details using ${{ steps.get_task_details.outputs.task_details }}
+#       - name: Update GitHub Issue
+#         run: |
+#           # Your code to update the GitHub issue based on the Asana task details goes here
+#           # You can access the task details using ${{ steps.get_task_details.outputs.task_details }}
 
-          # Example notification within GitHub Actions
-          echo "The Asana task has been updated. Please review and make necessary changes to the GitHub issue."
+#           # Example notification within GitHub Actions
+#           echo "The Asana task has been updated. Please review and make necessary changes to the GitHub issue."
 
-      - name: Update Asana Task
-        run: |
-          # Your code to update the Asana task based on changes in GitHub goes here
+#       - name: Update Asana Task
+#         run: |
+#           # Your code to update the Asana task based on changes in GitHub goes here
 
-          # Example notification within GitHub Actions
-          echo "The GitHub issue has been updated. The changes will be reflected in the Asana task."
+#           # Example notification within GitHub Actions
+#           echo "The GitHub issue has been updated. The changes will be reflected in the Asana task."
 
-      - name: Notify Asana for Ready to Test
-        if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, 'ready to test') }}
-        run: |
-          # Your code to notify Asana that the ticket is ready for testing goes here
+#       - name: Notify Asana for Ready to Test
+#         if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, 'ready to test') }}
+#         run: |
+#           # Your code to notify Asana that the ticket is ready for testing goes here
 
-          # Example notification within GitHub Actions
-          echo "The ticket is ready for testing. Please proceed with testing."
+#           # Example notification within GitHub Actions
+#           echo "The ticket is ready for testing. Please proceed with testing."
 
-      - name: Notify GitHub for Ticket Update
-        run: |
-          # Your code to notify GitHub about the ticket update goes here
+#       - name: Notify GitHub for Ticket Update
+#         run: |
+#           # Your code to notify GitHub about the ticket update goes here
 
-          # Example notification within GitHub Actions
-          echo "The Asana task has been updated. Please review and make necessary changes to the GitHub issue."
+#           # Example notification within GitHub Actions
+#           echo "The Asana task has been updated. Please review and make necessary changes to the GitHub issue."
