@@ -32,28 +32,15 @@ jobs:
             const projectId = '1204763105220463'; // Replace with your Asana project ID
             const token = '1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59'; // Replace with your Asana Personal Access Token
 
-            const createTask = async () => {
-              try {
-                const response = await axios.post(
-                  'https://app.asana.com/api/1.0/tasks',
-                  {
-                    data: {
-                      name: taskName,
-                      notes: 'Branch: ' + branchName + '\\nAuthor: ' + commitAuthor + '\\nCommit SHA: ' + commitMessage,
-                      projects: [projectId],
-                    },
-                  },
-                  {
-                    headers: {
-                      'Authorization': 'Bearer ' + token,
-                    },
-                  }
-                );
-                console.log('Asana task created with ID:', response.data.data.id);
+            const taskResponse = await axios.get(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
+             headers: {
+                'Authorization': 'Bearer ' + token,
+              },
+            });
 
                 // Get task assignee's email
                 const taskId = response.data.data.id;
-                const taskResponse = await axios.get(`https://app.asana.com/api/1.0/tasks/${taskId}`), {
+                const taskResponse = await axios.get(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
                   headers: {
                     'Authorization': 'Bearer ' + token,
                   },
