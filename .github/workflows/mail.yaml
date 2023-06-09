@@ -83,7 +83,7 @@ jobs:
                 from: 'prernagarsole@gmail.com', // Replace with your Gmail email address
                 to: assigneeEmail,
                 subject: 'New GitHub Push',
-                text: `A new push event has occurred on GitHub. Task ID: ${taskId}`,
+                text: 'A new push event has occurred on GitHub. Task ID: ' + taskId,
               };
 
               transporter.sendMail(mailOptions, (error, info) => {
