@@ -56,7 +56,7 @@ jobs:
             const fetchAssigneeEmail = async (taskId) => {
               try {
                 const response = await axios.get(
-                  `https://app.asana.com/api/1.0/tasks/${taskId}`,
+                  'https://app.asana.com/api/1.0/tasks/' + taskId,
                   {
                     headers: {
                       'Authorization': 'Bearer ' + token,
