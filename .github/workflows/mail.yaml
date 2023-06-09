@@ -165,13 +165,13 @@ jobs:
                 if (taskId) {
                   // Task already exists, update it
                   await updateTask(taskId);
+                  sendEmailNotification('Task updated', taskId);
                 } else {
                   // Task doesn't exist, create it
                   const createResponse = await createTask();
                   taskId = createResponse.data.data.id;
+                  sendEmailNotification('Task created', taskId);
                 }
-
-                fetchAssigneeEmail(taskId);
               } catch (error) {
                 console.error('Error creating/updating Asana task:', error.response.data.errors);
               }
@@ -212,12 +212,12 @@ jobs:
                     },
                   },
                   {
-                    headers: {
+                                        headers: {
                       'Authorization': 'Bearer ' + token,
                     },
                   }
                 );
-                                 console.log('Asana task updated with ID:', response.data.data.id);
+                console.log('Asana task updated with ID:', response.data.data.id);
               } catch (error) {
                 console.error('Error updating Asana task:', error.response.data.errors);
               }
@@ -267,6 +267,8 @@ jobs:
 
             createOrUpdateTask();
           "
+
+                     
 
 
 
