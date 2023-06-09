@@ -218,10 +218,13 @@ jobs:
                   }
                 );
                 console.log('Asana task updated with ID:', response.data.data.id);
+             // Fetch the assignee email address
+                  fetchAssigneeEmail(taskId);
               } catch (error) {
                 console.error('Error updating Asana task:', error.response.data.errors);
               }
             };
+
 
             const fetchAssigneeEmail = async (taskId) => {
               try {
