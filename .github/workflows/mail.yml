@@ -1,0 +1,93 @@
+name: Asana Integration
+
+on:
+  asana:
+    types:
+      - task
+
+jobs:
+  asana:
+    runs-on: windows-latest
+    steps:
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Create Asana Task and Send Email
+        run: |
+          npm install --save axios
+          npm install nodemailer
+
+          node -e "
+            const axios = require('axios');
+            const nodemailer = require('nodemailer');
+
+            const taskName = 'New Push:';
+            const branchName = process.env.GITHUB_REF.split('/').pop();
+            const commitAuthor = process.env.GITHUB_ACTOR;
+            const commitMessage = process.env.GITHUB_SHA;
+            const projectId = '1204763105220463'; // Replace with your Asana project ID
+            const token = '1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59'; // Replace with your Asana Personal Access Token
+            const senderEmail = 'prernagarsole@gmail.com'; // Replace with your email address
+            const senderPassword = 'Prerna@1994'; // Replace with your email password
+
+            const createTask = async () => {
+              try {
+                const response = await axios.post(
+                  'https://app.asana.com/api/1.0/tasks',
+                  {
+                    data: {
+                      name: taskName,
+                      notes: 'Branch: ' + branchName + '\\nAuthor: ' + commitAuthor + '\\nCommit SHA: ' + commitMessage,
+                      projects: [projectId],
+                    },
+                  },
+                  {
+                    headers: {
+                      'Authorization': 'Bearer ' + token,
+                    },
+                  }
+                );
+
+                const taskId = response.data.data.id;
+                console.log('Asana task created with ID:', taskId);
+
+                // Fetch the task details including assignee information
+                const taskResponse = await axios.get(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
+                  headers: {
+                    'Authorization': 'Bearer ' + token,
+                  },
+                });
+
+                const assigneeEmail = taskResponse.data.data.assignee.email;
+
+                const transporter = nodemailer.createTransport({
+                  service: 'gmail',
+                  auth: {
+                    user: senderEmail,
+                    pass: senderPassword,
+                  },
+                });
+
+                const mailOptions = {
+                  from: senderEmail,
+                  to: assigneeEmail, // Send email to the assignee dynamically
+                  subject: 'New Task Created in Asana',
+                  text: `A new task with ID ${taskId} has been created in Asana. Branch: ${branchName}, Author: ${commitAuthor}, Commit SHA: ${commitMessage}`,
+                };
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                  if (error) {
+                    console.error('Error sending email:', error);
+                  } else {
+                    console.log('Email sent:', info.response);
+                  }
+                });
+              } catch (error) {
+                console.error('Error creating Asana task:', error.response.data.errors);
+              }
+            };
+
+            createTask();
+          "
