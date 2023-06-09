@@ -38,7 +38,7 @@ jobs:
                 {
                   data: {
                     name: taskName,
-                    notes: 'Branch: ' + branchName + '\\nAuthor: ' + commitAuthor + '\\nCommit SHA: ' + commitMessage,
+                    notes: 'Branch: ' + branchName + '\nAuthor: ' + commitAuthor + '\nCommit SHA: ' + commitMessage,
                     projects: [projectId],
                   },
                 },
@@ -50,6 +50,7 @@ jobs:
               );
               console.log('Asana task created with ID:', response.data.data.id);
 
+              // Get task assignee's email
               const taskId = response.data.data.id;
               const taskResponse = await axios.get(`https://app.asana.com/api/1.0/tasks/${taskId}`, {
                 headers: {
@@ -59,6 +60,7 @@ jobs:
 
               const assigneeEmail = taskResponse.data.data.assignee.email;
 
+              // Send email notification
               const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
@@ -71,7 +73,7 @@ jobs:
                 from: 'prernagarsole@gmail.com',
                 to: assigneeEmail,
                 subject: 'Asana Task Updated',
-                text: \`The Asana task has been updated for the push job. Task ID: \${response.data.data.id}\`,
+                text: `The Asana task has been updated for the push job. Task ID: ${response.data.data.id}`,
               };
 
               transporter.sendMail(mailOptions, (error, info) => {
