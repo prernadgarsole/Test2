@@ -110,6 +110,14 @@ on:
   push:
     branches:
       - main
+  workflow_run:
+    workflows: ["Asana Integration"]
+    types:
+      - completed
+      - asana:item:commented
+      - asana:item:completed
+      - asana:item:modified
+
 
 jobs:
   asana:
