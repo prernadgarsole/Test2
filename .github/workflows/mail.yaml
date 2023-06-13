@@ -293,7 +293,9 @@
 
 
 
+
 name: Asana Integration Workflow
+
 on:
   push:
     branches:
@@ -301,14 +303,12 @@ on:
   issue_comment:
     types:
       - created
-  task:
-    types:
-      - completed
   workflow_run:
     workflows: ["Asana Integration"]
     types:
       - completed
       - comment_added
+      - modified
 
 jobs:
   asana:
