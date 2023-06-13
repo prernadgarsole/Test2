@@ -463,13 +463,14 @@ jobs:
               }
             };
 
-             const sendEmailNotification = (assigneeEmail, taskId) => {
-               const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                  user: 'prernagarsole@gmail.com', // Replace with your Gmail email address
-                  pass: 'ocycmtbojtdomkof', // Replace with your Gmail application-specific password                 },
-              });
+                  const sendEmailNotification = (assigneeEmail, taskId) => {
+             const transporter = nodemailer.createTransport({
+          service: 'gmail',
+            auth: {
+              user: 'your-email@gmail.com', // Replace with your Gmail email address
+              pass: 'your-password', // Replace with your Gmail application-specific password
+            },
+          });
 
               const mailOptions = {
                 from: 'prernagarsole@gmail.com', // Replace with your Gmail email address
