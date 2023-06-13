@@ -113,7 +113,7 @@ on:
     workflows: ["Asana Integration"]
     types:
       - completed
-      - asana:item:commented
+      - asana:item:comment_added
       - asana:item:completed
       - asana:item:modified
 
