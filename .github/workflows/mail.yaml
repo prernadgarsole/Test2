@@ -104,8 +104,7 @@
 
 
 
-name: Asana Integration
-
+name: Asana Integration Workflow
 on:
   push:
     branches:
