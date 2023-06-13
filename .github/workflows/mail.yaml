@@ -353,8 +353,8 @@ jobs:
 
               return;
               }
-                  return;
-                }
+              
+                
                 // Check if the task already exists
                 const existingTaskResponse = await axios.get(
                   'https://app.asana.com/api/1.0/tasks',
