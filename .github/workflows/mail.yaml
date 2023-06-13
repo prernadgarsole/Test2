@@ -342,6 +342,17 @@ jobs:
                   const completedTaskId = process.env.GITHUB_EVENT.workflow_run.conclusion;
                   // Perform necessary actions for task completion, such as updating the task status in Asana or sending an email notification
                   // ...
+                   // Example: Updating the task status in Asana
+                    await updateTaskStatus(completedTaskId, 'completed');
+
+                    // Fetch assignee email
+                    await fetchAssigneeEmail(completedTaskId);
+
+                    // Example: Sending an email notification
+                    sendEmailNotification('Task completed', completedTaskId);
+
+              return;
+              }
                   return;
                 }
                 // Check if the task already exists
