@@ -420,6 +420,19 @@ jobs:
               }
             };
 
+
+          const handleTaskCompletion = async () => {
+            const eventType = process.env.GITHUB_EVENT_NAME;
+            if (eventType === 'task_completed') {
+              const completedTaskId = process.env.GITHUB_EVENT.taskId;
+
+              // Perform necessary actions for task completion
+              await updateTaskStatus(completedTaskId, 'completed');
+              await fetchAssigneeEmail(completedTaskId);
+              sendEmailNotification('Task completed', completedTaskId);
+            }
+          };
+
             const updateTask = async (taskId) => {
               try {
                 const response = await axios.put(
@@ -489,6 +502,7 @@ jobs:
             };
 
             createOrUpdateTask();
+            handleTaskCompletion();
           "
 
 
