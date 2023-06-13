@@ -104,6 +104,195 @@
 
 
 
+# name: Asana Integration Workflow
+# on:
+#   push:
+#     branches:
+#       - main
+#   issue_comment:
+#     types:
+#       - created
+#   workflow_run:
+#     workflows: ["Asana Integration"]
+#     types:
+#       - completed
+#       - comment_added
+#       - modified
+
+
+# jobs:
+#   asana:
+#     runs-on: windows-latest
+#     steps:
+#       - name: Install Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '14'
+
+#       - name: Create/Update Asana task
+#         run: |
+#           npm install --save axios nodemailer
+#           node -e "
+#             const axios = require('axios');
+#             const nodemailer = require('nodemailer');
+
+#             const taskName = 'New Push:';
+#             const branchName = process.env.GITHUB_REF.split('/').pop();
+#             const commitAuthor = process.env.GITHUB_ACTOR;
+#             const commitMessage = process.env.GITHUB_SHA;
+#             const projectId = '1204763105220463'; // Replace with your Asana project ID
+#             const token = '1/1204760161937729:b3bcc2c3e471c304b84924c4d1290a59'; // Replace with your Asana Personal Access Token
+
+#             const createOrUpdateTask = async () => {
+#               try {
+#                 // Check if the task already exists
+#                 const existingTaskResponse = await axios.get(
+#                   'https://app.asana.com/api/1.0/tasks',
+#                   {
+#                     params: {
+#                       project: projectId,
+#                       completed_since: 'now',
+#                       opt_fields: 'id,name,completed',
+#                     },
+#                     headers: {
+#                       'Authorization': 'Bearer ' + token,
+#                     },
+#                   }
+#                 );
+
+#                 const existingTasks = existingTaskResponse.data.data;
+#                 let taskId = null;
+
+#                 // Find the task with the same name and branch
+#                 for (const task of existingTasks) {
+#                   if (task.name === taskName && task.notes.includes('Branch: ' + branchName)) {
+#                     taskId = task.id;
+#                     break;
+#                   }
+#                 }
+
+
+#            if (taskId) {
+#                             // Task already exists, update it
+#                             await updateTask(taskId);
+#                             sendEmailNotification('Task updated', taskId);
+#                           } else {
+#                             // Task doesn't exist, create it
+#                             const createResponse = await createTask();
+#                             taskId = createResponse.data.data.id;
+#                             sendEmailNotification('Task created', taskId);
+#                           }
+#                         } catch (error) {
+#                           console.error('Error creating/updating Asana task:', error.response.data.errors);
+#                         }
+#                       };
+                  
+
+#             const createTask = async () => {
+#               try {
+#                 const response = await axios.post(
+#                   'https://app.asana.com/api/1.0/tasks',
+#                   {
+#                     data: {
+#                       name: taskName,
+#                       notes: 'Branch: ' + branchName + '\\nAuthor: ' + commitAuthor + '\\nCommit SHA: ' + commitMessage,
+#                       projects: [projectId],
+#                     },
+#                   },
+#                   {
+#                     headers: {
+#                       'Authorization': 'Bearer ' + token,
+#                     },
+#                   }
+#                 );
+#                 console.log('Asana task created with ID:', response.data.data.id);
+#                 return response;
+#               } catch (error) {
+#                 console.error('Error creating Asana task:', error.response.data.errors);
+#               }
+#             };
+
+#             const updateTask = async (taskId) => {
+#               try {
+#                 const response = await axios.put(
+#                   'https://app.asana.com/api/1.0/tasks/' + taskId,
+#                   {
+#                     data: {
+#                       name: taskName,
+#                       notes: 'Branch: ' + branchName + '\\nAuthor: ' + commitAuthor + '\\nCommit SHA: ' + commitMessage,
+#                     },
+#                   },
+#                   {
+#                                         headers: {
+#                       'Authorization': 'Bearer ' + token,
+#                     },
+#                   }
+#                 );
+#                 console.log('Asana task updated with ID:', response.data.data.id);
+#              // Fetch the assignee email address
+#                   await fetchAssigneeEmail(taskId);
+#                   // Send email notification
+#                sendEmailNotification('Task updated', taskId);
+#               } catch (error) {
+#                 console.error('Error updating Asana task:', error.response.data.errors);
+#               }
+#             };
+
+
+#             const fetchAssigneeEmail = async (taskId) => {
+#               try {
+#                 const response = await axios.get(
+#                   'https://app.asana.com/api/1.0/tasks/' + taskId,
+#                   {
+#                     headers: {
+#                       'Authorization': 'Bearer ' + token,
+#                     },
+#                   }
+#                 );
+#                 const assigneeEmail = response.data.data.assignee.email;
+#                 sendEmailNotification(assigneeEmail, taskId);
+#               } catch (error) {
+#                 console.error('Error fetching assignee email:', error.response.data.errors);
+#               }
+#             };
+
+#             const sendEmailNotification = (assigneeEmail, taskId) => {
+#               const transporter = nodemailer.createTransport({
+#                 service: 'gmail',
+#                 auth: {
+#                   user: 'prernagarsole@gmail.com', // Replace with your Gmail email address
+#                   pass: 'ocycmtbojtdomkof', // Replace with your Gmail application-specific password
+#                 },
+#               });
+
+#               const mailOptions = {
+#                 from: 'prernagarsole@gmail.com', // Replace with your Gmail email address
+#                 to: assigneeEmail,
+#                 subject: 'New GitHub Push',
+#                 text: 'A new push event has occurred on GitHub. Task ID: ' + taskId,
+#               };
+
+#               transporter.sendMail(mailOptions, (error, info) => {
+#                 if (error) {
+#                   console.error('Error sending email:', error);
+#                 } else {
+#                   console.log('Email notification sent:', info.response);
+#                 }
+#               });
+#             };
+
+#             createOrUpdateTask();
+#           "
+
+
+
+
+
+
+
+
+
+
 name: Asana Integration Workflow
 on:
   push:
@@ -112,13 +301,14 @@ on:
   issue_comment:
     types:
       - created
+  task:
+    types:
+      - completed
   workflow_run:
     workflows: ["Asana Integration"]
     types:
       - completed
       - comment_added
-      - modified
-
 
 jobs:
   asana:
@@ -171,22 +361,20 @@ jobs:
                   }
                 }
 
-
-           if (taskId) {
-                            // Task already exists, update it
-                            await updateTask(taskId);
-                            sendEmailNotification('Task updated', taskId);
-                          } else {
-                            // Task doesn't exist, create it
-                            const createResponse = await createTask();
-                            taskId = createResponse.data.data.id;
-                            sendEmailNotification('Task created', taskId);
-                          }
-                        } catch (error) {
-                          console.error('Error creating/updating Asana task:', error.response.data.errors);
-                        }
-                      };
-                  
+                if (taskId) {
+                  // Task already exists, update it
+                  await updateTask(taskId);
+                  sendEmailNotification('Task updated', taskId);
+                } else {
+                  // Task doesn't exist, create it
+                  const createResponse = await createTask();
+                  taskId = createResponse.data.data.id;
+                  sendEmailNotification('Task created', taskId);
+                }
+              } catch (error) {
+                console.error('Error creating/updating Asana task:', error.response.data.errors);
+              }
+            };
 
             const createTask = async () => {
               try {
@@ -216,28 +404,27 @@ jobs:
               try {
                 const response = await axios.put(
                   'https://app.asana.com/api/1.0/tasks/' + taskId,
-                  {
+                                    {
                     data: {
                       name: taskName,
                       notes: 'Branch: ' + branchName + '\\nAuthor: ' + commitAuthor + '\\nCommit SHA: ' + commitMessage,
                     },
                   },
                   {
-                                        headers: {
+                    headers: {
                       'Authorization': 'Bearer ' + token,
                     },
                   }
                 );
                 console.log('Asana task updated with ID:', response.data.data.id);
-             // Fetch the assignee email address
-                  await fetchAssigneeEmail(taskId);
-                  // Send email notification
-               sendEmailNotification('Task updated', taskId);
+                // Fetch the assignee email address
+                await fetchAssigneeEmail(taskId);
+                // Send email notification
+                sendEmailNotification('Task updated', taskId);
               } catch (error) {
                 console.error('Error updating Asana task:', error.response.data.errors);
               }
             };
-
 
             const fetchAssigneeEmail = async (taskId) => {
               try {
@@ -260,8 +447,8 @@ jobs:
               const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                  user: 'prernagarsole@gmail.com', // Replace with your Gmail email address
-                  pass: 'ocycmtbojtdomkof', // Replace with your Gmail application-specific password
+                  user: 'your-email@gmail.com', // Replace with your Gmail email address
+                  pass: 'your-password', // Replace with your Gmail application-specific password
                 },
               });
 
@@ -283,6 +470,8 @@ jobs:
 
             createOrUpdateTask();
           "
+
+
 
                      
 
