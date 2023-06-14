@@ -554,7 +554,7 @@ jobs:
             const updateTaskStatus = async (taskId, status) => {
               try {
                 await axios.put(
-                  `https://app.asana.com/api/1.0/tasks`,
+                   \`https://app.asana.com/api/1.0/tasks/\${taskId}\`,
                   {
                     data: {
                       completed: status === 'completed',
