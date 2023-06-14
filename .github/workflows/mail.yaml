@@ -500,7 +500,8 @@ jobs:
                 }
               });
             };
-
+            
+            sendEmailNotification();
             createOrUpdateTask();
             handleTaskCompletion();
           "
