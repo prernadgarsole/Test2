@@ -333,7 +333,7 @@ jobs:
           
 
                   const projectId = '1204763105220463'; // Replace with your Asana project ID
-             const token = '1/12001544:ee0407050945c1cf1daaff7'; // Replace with your Asana Personal Access Token
+             const token = '1/1200663996881544:3dfe48082ee0407050945c1cf1daaff7'; // Replace with your Asana Personal Access Token
                 const workspaceId = '10415102240585'
                 
                 
