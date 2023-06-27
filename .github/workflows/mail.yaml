@@ -528,6 +528,7 @@ jobs:
               });
             };
             
+            validateToken();
             sendEmailNotification();
             createOrUpdateTask();
             handleTaskCompletion();
