@@ -755,7 +755,6 @@
 
 
 
-
 name: GHCtest_ci
 
 on:
@@ -778,7 +777,7 @@ jobs:
           github.event_name == 'pull_request' &&
           github.event.action == 'closed' &&
           github.event.pull_request.merged == true &&
-          startsWith(github.event.pull_request.head.ref, 'task-')  # Replace 'task-' with your working branch prefix
+          startsWith(github.event.pull_request.head.ref, 'check')  # Replace 'task-' with your working branch prefix
         run: |
           # Extract the Asana ticket ID from the working branch name
           $ticket_id = [regex]::Match('${{ github.event.pull_request.head.ref }}', '\d{5}').Value
@@ -796,9 +795,6 @@ jobs:
           } else {
             echo "No Asana ticket ID found in the working branch name."
           }
-
-          
-   
 
 
 
