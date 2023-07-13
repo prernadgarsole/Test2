@@ -27,7 +27,8 @@ jobs:
           $ticket_id = [regex]::Match('${{ github.event.pull_request.head.ref }}', '\d{5}').Value
           if ($ticket_id) {
             # Use the ticket ID to fetch the task details from Asana
-            $workspace_id = "10415102240585"  # Replace with your actual workspace ID
+           # $workspace_id = "10415102240585"  # Replace with your actual workspace ID
+            $workspace_id = "1204796814838581" 
             $asana_url = "https://app.asana.com/api/1.0/tasks/$ticket_id?workspace=$workspace_id"
             $headers = @{
               "Authorization" = "Bearer $env:ASANA_TOKEN"
